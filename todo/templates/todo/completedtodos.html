@@ -1,19 +1,26 @@
-{% extends 'todo\base.html' %}
-
+{% extends "todo/base.html" %}
+{% load static %}
 {% block content %}
-
-Completed todos
-<br>
-<ul>
-    {% for todo in todos %}
-        <li>
-            <a href="{% url 'viewtodo' todo.id %}">
-            {% if todo.important %}<b>{% endif %}{{ todo.title }}{% if todo.important %}</b>{% endif %}
-            </a>
-            {% if todo.description %}  - {{todo.description}}{% endif %}
-            - completed on {{ todo.datecompleted|date:'M d Y H:i' }}
-        </li>
-    {% endfor %}
-</ul>
-
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <h2>Completed Todos</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-6">
+            <div class="list-group">
+                {% for todo in todos %}
+                    <a href="{% url 'viewtodo' todo.id %}" class="list-group-item d-flex justify-content-between list-group-item-action{% if todo.important %} list-group-item-warning{% endif %}">
+                        <div><b>{{ todo.title }}</b> - Completed on {{ todo.datecompleted|date:'M j Y H:i' }}</div>
+                        <form style="display: inline" method="POST" action="{% url 'deletetodo' todo.id %}">
+                            {% csrf_token %}
+                            <button id="delete" type="submit" class="btn btn-sm" data-toggle="tooltip" title="Delete">
+                                <img src="{% static 'todo/trash3.svg' %}" alt="Bootstrap" width="20" height="20">
+                            </button>
+                        </form>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

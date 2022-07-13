@@ -16,7 +16,7 @@ def signupuser(request):
     if request.method == 'GET':
         return render(request, 'todo/signupuser.html', {'form':UserCreationForm()})
     else:
-        if request.POST['password1'] == request.POST['password2']:
+        if request.POST['password1'] == request.POST['password2'] and request.POST['password1'] != '':
             try:
                 user = User.objects.create_user(request.POST['username'], 
                                                 password=request.POST['password1'])
@@ -26,7 +26,9 @@ def signupuser(request):
             except IntegrityError:
                 return render(request, 'todo/signupuser.html', {'form':UserCreationForm(), 
                                                             'error':'Such login allready registered'})
-
+        elif request.POST['password1'] == '':
+            return render(request, 'todo/signupuser.html', {'form':UserCreationForm(), 
+                                                            'error':'Password must contain one symbol at least'})
         else:
             return render(request, 'todo/signupuser.html', {'form':UserCreationForm(), 
                                                             'error':'Passwords didn\'t match'})

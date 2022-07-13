@@ -1,24 +1,58 @@
 
-{% if user.is_authenticated %}
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-Logged In as {{ user.username }}
+    <!-- Bootstrap CSS -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'todo/css/bootstrap.min.css' %}" type="text/css">
+    <link rel="icon" type="svg"  href="{% static 'todo/card-checklist.svg' %}">
+    <title>Todo Project</title>
+</head>
 
-<a href="{% url 'createtodo' %}">Create</a>
-<a href="{% url 'currenttodos' %}">Current</a>
-<a href="{% url 'completedtodos' %}">Completed</a>
-
-<form action="{% url 'logoutuser' %}" method="POST">
-    {% csrf_token %}
-    <button type="submit">Logout</button>  
-</form>
-<br>
-
-{% else %}
-
-<a href="{% url 'loginuser' %}">LogIn</a>
-<a href="{% url 'signupuser' %}">SignUp</a>
-<br>
-
-{% endif %}
+<body>
+    <div class="container">
+        <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+          <a href='/' class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            <img src="{% static 'todo/card-checklist.svg' %}" alt="Bootstrap" width="32" height="32" class="d-inline-block align-top">
+          </a>
+          <ul class="nav col-12 col-md-5 mb-2 justify-content-center mb-md-0">
+            {% if user.is_authenticated %}
+                  
+                <li><a href="{% url 'createtodo' %}" class="nav-link px-2 link-secondary">Create</a></li>
+                <li><a href="{% url 'currenttodos' %}" class="nav-link px-2 link-dark">Current</a></li>
+                <li><a href="{% url 'completedtodos' %}" class="nav-link px-2 link-dark">Completed</a></li>
+                
+            {% endif %}
+          </ul>
+          
+            {% if user.is_authenticated %}
+            
+            <div class="col-md-2 text-end">
+                Logged in as <b>{{ user.username }}</b>
+            </div> 
+            <div class="col-md-1 text-center">
+                <form action="{% url 'logoutuser' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Logout</button>  
+                </form>
+            </div> 
+            {% else %}
+            <span>
+            <div class="col-md-12 text-end">
+                <a href="{% url 'loginuser' %}" class="btn btn-outline-primary me-2">Login</a>
+                <a href="{% url 'signupuser' %}" class="btn btn-primary">SignUp</a>
+            </div>
+          </span>
+            {% endif %}
+          
+    </header>
+  </div>
 
 {% block content %} {% endblock %}
+<script src="{% static 'todo/js/bootstrap.min.js' %}"></script>
+</body>
+</html>
